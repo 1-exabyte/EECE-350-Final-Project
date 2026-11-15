@@ -1,6 +1,6 @@
 # receiver.py -- Member 3 (Andrew Samaha): receiver and acknowledgements
 #
-# Packet header (agreed by the group):  type (1 byte) | seq (4 bytes) | data
+# Packet header (agreed by the group):  type (1 byte) | seq (4 bytes) | length (2 bytes) | data
 #   type 0 = DATA   type 1 = ACK   type 2 = END (data = SHA-256 of the file)
 #
 # Every ACK carries "expected" = the number of the next packet I need.
