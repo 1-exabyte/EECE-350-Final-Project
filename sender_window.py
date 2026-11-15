@@ -1,6 +1,8 @@
 # Jinan Sief El Deen
 # Member 2: sending window, ACK handling, and retransmissions
 import time
+import struct
+import socket
 
 
 def fill_window(packets, base, next_seq, window_size, send_packet, state, send_time, stats):
@@ -52,6 +54,64 @@ def has_timed_out(base, next_seq, timer_started, now, timeout):
         return False
 
     return now - timer_started >= timeout  # simple :)
+
+
+def run_sender(packets, window_size, send_packet, ack_socket, timeout=1.0):
+    base, next_seq, dup_count = 0, 0, 0
+    state = ["-" for i in range(len(packets))]
+    send_time = {}
+    stats = {"transmissions": 0, "retransmissions": 0, "timeouts": 0}
+    timer_started = None
+    started = time.monotonic()
+    ack_socket.settimeout(0.05)
+    while base < len(packets):
+        if base == next_seq:
+            timer_started = time.monotonic()
+        next_seq = fill_window(
+            packets, base, next_seq, window_size, send_packet, state, send_time, stats)
+
+        old_base = base
+        old_retrans = stats["retransmissions"]
+        try:
+            data, address = ack_socket.recvfrom(65535)
+        except (socket.timeout, ConnectionResetError):
+            data = None
+        if data is not None and len(data) == 7:
+            packet_type, ack_num, length = struct.unpack("!BIH", data)
+
+            if packet_type == 1 and length == 0:
+                base, dup_count = process_ack(
+                    base, next_seq, ack_num, dup_count,
+                    packets, send_packet, state, send_time, stats
+                )
+        if data != None and len(data) == 7:
+            packet_type, ack_num, length = struct.unpack("!BIH", data)
+
+        if base != old_base or stats["retransmissions"] > old_retrans:
+            if base < next_seq:
+                timer_started = time.monotonic()
+            else:
+                timer_started = None
+
+        if has_timed_out(
+            base, next_seq, timer_started, time.monotonic(), timeout
+        ):
+            print("TIMEOUT", base)
+            stats["timeouts"] += 1
+
+            retransmit(
+                base, packets, send_packet, state, send_time, stats
+            )
+
+            timer_started = time.monotonic()
+            dup_count = 0
+        stats["transfer_time"] = time.monotonic() - started
+
+    print("All packets, including END, acknowledged.")
+    print("Final state:", state)
+    print("Sender statistics:", stats)
+
+    return stats
 
 
 if __name__ == "__main__":
