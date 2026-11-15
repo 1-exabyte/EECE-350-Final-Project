@@ -80,7 +80,10 @@ while True:
     if ptype == END:
         end_seq = seq
         end_hash = payload
-        print(f"RECV END({seq}) -> file has {seq} packets")
+        if expected == seq:
+            print(f"RECV END({seq})early -> DUP ACK {expected}")
+        else:
+            print(f"RECV END({seq}) -> file has {seq} packets")
 
     # ---- in order: glue it, then glue everything in the buffer that now follows
     elif seq == expected:
