@@ -18,7 +18,7 @@ Python 3, standard library only.
 ## Packet format
 
 ```
-type (1 byte) | seq (4 bytes) | data
+type (1 byte) | seq (4 bytes) | length (2 bytes) | data
 ```
 
 | Type | seq | data |
