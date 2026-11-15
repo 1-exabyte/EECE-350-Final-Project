@@ -68,6 +68,9 @@ while True:
 
     ptype, seq, length = struct.unpack("!BIH", data[:7]) 
     payload = data[7:7+length]
+    if pytype not in (DATA,  END) or len(payload) != length:
+        print(f"BAD packet ({len(data)} bytes) --skipped--")
+        continue
 
     received += 1
     if start_time is None:
