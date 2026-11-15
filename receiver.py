@@ -81,7 +81,7 @@ while True:
         end_seq = seq
         end_hash = payload
         if expected < seq:
-            print(f"RECV END({seq})early -> DUP ACK {expected}")
+            print(f"RECV END({seq}) early -> DUP ACK {expected}")
         else:
             print(f"RECV END({seq}) -> file has {seq} packets")
 
