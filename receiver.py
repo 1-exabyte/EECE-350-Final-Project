@@ -67,7 +67,8 @@ while True:
         continue
 
     ptype, seq, length = struct.unpack("!BIH", data[:7]) 
-    payload = data[7:]
+    payload = data[7:7+length]
+
     received += 1
     if start_time is None:
         start_time = time.time()
