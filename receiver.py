@@ -62,6 +62,9 @@ while True:
     except ConnectionResetError:        # Windows quirk when the sender closes: ignore it
         continue
 
+    if len(data) < 7:
+        print(f"")
+
     ptype, seq, length = struct.unpack("!BIH", data[:7]) 
     payload = data[7:]
     received += 1
