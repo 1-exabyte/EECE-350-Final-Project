@@ -1,6 +1,6 @@
 # protocol.py -- shared packet format (agreed by all members)
 #
-# Every packet:   type (1 byte) | seq (4 bytes) | data
+# Every packet:   type (1 byte) | seq (4 bytes) | length (2 bytes) | data
 #
 #   DATA (0): seq = chunk number,          data = a piece of the file
 #   ACK  (1): seq = next packet expected,  data = nothing
