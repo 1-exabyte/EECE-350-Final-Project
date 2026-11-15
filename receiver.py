@@ -53,7 +53,7 @@ def glue(data):
 
 
 def send_ack():
-    sock.sendto(struct.pack("!BI", ACK, expected), addr)
+    sock.sendto(struct.pack("!BIH", ACK, expected,0), addr)
 
 
 while True:
@@ -63,7 +63,7 @@ while True:
         continue
 
     ptype, seq = struct.unpack("!BIH", data[:7])
-    payload = data[5:]
+    payload = data[7:]
     received += 1
     if start_time is None:
         start_time = time.time()
