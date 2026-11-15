@@ -62,7 +62,7 @@ while True:
     except ConnectionResetError:        # Windows quirk when the sender closes: ignore it
         continue
 
-    ptype, seq = struct.unpack("!BI", data[:5])
+    ptype, seq = struct.unpack("!BIH", data[:7])
     payload = data[5:]
     received += 1
     if start_time is None:
