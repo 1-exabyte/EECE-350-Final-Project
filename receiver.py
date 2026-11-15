@@ -132,7 +132,6 @@ while True:
     send_ack()
 
 # ---- write the file, then check it against the SHA-256 from END
-end_time = time.time()
 file_data = b"".join(chunks)
 with open(out_file, "wb") as f:
     f.write(file_data)
