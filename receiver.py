@@ -80,7 +80,7 @@ while True:
     if ptype == END:
         end_seq = seq
         end_hash = payload
-        if expected == seq:
+        if expected < seq:
             print(f"RECV END({seq})early -> DUP ACK {expected}")
         else:
             print(f"RECV END({seq}) -> file has {seq} packets")
