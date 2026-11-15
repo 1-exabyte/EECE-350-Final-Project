@@ -116,12 +116,22 @@ while True:
         expected += 1
         send_ack()
         print(f"ACK {expected} (END received)")
-        break
+        end_time = time.time()
+        sock.settimeout(1.0)
+        while True:
+            try:
+                data, addr = sock.recvfrom(65535)
+            except socket.timeout:
+                break
+            if ConnectionResetError:        # Windows quirk when the sender closes: ignore it
+                continue
+            if len(data) >=7 and data[0] == END:
+                print(f"RECV END again -> ACK {expected} (re-sent)")
 
     send_ack()
 
 # ---- write the file, then check it against the SHA-256 from END
-end_time = time.time()
+
 file_data = b"".join(chunks)
 with open(out_file, "wb") as f:
     f.write(file_data)
