@@ -61,7 +61,7 @@ def update_timeout(sample_rtt, estimated_rtt, deviation):
         estimated_rtt = sample_rtt
         deviation = sample_rtt/2
     else:
-        deviaton = 0.75*deviation+0.25*abs(estimated_rtt-sample_rtt)
+        deviation = 0.75*deviation+0.25*abs(estimated_rtt-sample_rtt)
         estimated_rtt = 0.875 * estimated_rtt + 0.125 * sample_rtt
     new_timeout = max(1.0, estimated_rtt + max(0.001, 4 * deviation))
     return estimated_rtt, deviation, new_timeout
@@ -154,20 +154,14 @@ if __name__ == "__main__":
     send_time = {}
     stats = {"transmissions": 0, "retransmissions": 0, "timeouts": 0}
 
-    # Send packets 0, 1, 2, 3.
-    next_seq = fill_window(
-        packets, base, next_seq, window_size,
-        practice_send, state, send_time, stats
-    )
+    # Send packets 0, 1, 2, 3
+    next_seq = fill_window(packets, base, next_seq,
+                           window_size, practice_send, state, send_time, stats)
     base, dup_count = process_ack(
-        base, next_seq, 1, dup_count,
-        packets, practice_send, state, send_time, stats
-    )
+        base, next_seq, 1, dup_count, packets, practice_send, state, send_time, stats)
 
-    next_seq = fill_window(
-        packets, base, next_seq, window_size,
-        practice_send, state, send_time, stats
-    )
+    next_seq = fill_window(packets, base, next_seq,
+                           window_size, practice_send, state, send_time, stats)
 
     # pretend 3 more ACKs arrive, all requesting packet 1
     for _ in range(3):
