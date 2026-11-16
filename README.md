@@ -108,6 +108,5 @@ The following settings produce useful demonstrations with five DATA chunks plus 
 Start a fresh receiver for each run and check for `MATCH`. Changing the file size or settings can change the event sequence. Sender transmission attempts include simulated drops, whereas the channel's UDP-send counter counts actual sends.
 
 ## AI assistance and sources
-Jinan used ai only as a learning tool to understand syntax + work through explanaitons
-
+Jinan used ai only as a learning tool to understand syntax + work through explanaitons. (Also used AI to format and refine the draft of README)
 Andrew used Ai to look up library functions and syntax.
