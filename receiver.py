@@ -123,7 +123,10 @@ while True:
         send_ack()
         print(f"{GREEN}ACK {expected} (END received){RESET}")
         end_time = time.time()
-        sock.settimeout(2.0)
+        wait = 10.0
+        last_time = time.time()
+        print(f"Waiting {wait:.0f} s in case my last ACK was lost...")
+        sock.settimeout(wait)
         while True:
             try:
                 data, addr = sock.recvfrom(65535)
