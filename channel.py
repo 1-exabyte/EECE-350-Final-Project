@@ -50,3 +50,7 @@ def flush_channel(sock, destination, channel_state):
         channel_state["sent"] += 1
         print(f"FLUSHED packet {seq}")
         channel_state['held_packet']=None
+
+def print_channel_stats(channel_state):
+    print('========== CHANNEL STATISTICS ==========')
+    print(f"Packets sent through UDP : {channel_state['sent']}\nPackets dropped          : channel_state['dropped']\nPackets reordered        : {channel_state['reordered']}")
