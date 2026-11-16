@@ -1,4 +1,4 @@
-# sender.py -- Member 1: split the file into packets / Member 2: window and timers
+#  Jean Paul Chaaya: packet creation; Jinan Sief El Deen: sender integration
 import socket
 import random
 import os
