@@ -104,7 +104,7 @@ while True:
             print(f"{GREEN}RECV {seq} in order -> ACK {expected}{RESET}")
         else:
             gap_fills += 1
-            print(f"RECV {seq} fills gap -> ACK {expected}   (glued {first} to {expected - 1})")
+            print(f"{CYAN}RECV {seq} fills gap -> ACK {expected}   (glued {first} to {expected - 1}){RESET}")
 
     # ---- duplicate: already glued, or already waiting in the buffer
     elif seq < expected or seq in buffer:
