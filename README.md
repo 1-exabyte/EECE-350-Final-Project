@@ -10,12 +10,14 @@ Python 3, standard library only.
 | File | What it does |
 |---|---|
 | `protocol.py` | The packet format all members agreed on |
-| `sender.py` | Launcher connecting packet creation, the UDP socket, the channel and the window controller |
-| `channel.py` | Unreliable channel: drops and reorders packets on purpose |
-| `receiver.py` | Receiver: cumulative ACKs, buffering, reassembly, SHA-256 check |
-| `practice/` | Practice and test scripts used while building the receiver |
 | `packets.py` | Reads and splits the file, constructs packets and creates END with its hash |
+| `channel.py` | Unreliable channel: drops and reorders packets on purpose |
 | `sender_window.py` | Sending window, ACK handling, retransmissions, adaptive timeout and live display |
+| `sender.py` | Launcher connecting packet creation, the UDP socket, the channel and the window controller |
+| `receiver.py` | Receiver: cumulative ACKs, buffering, reassembly, SHA-256 check |
+| `test_input.txt` | Example file the sender transfers |
+| `practice/` | Practice and test scripts used while building the receiver |
+
 ## Packet format
 
 ```
@@ -47,6 +49,7 @@ python sender.py
 ```
 
 The input file is selected using `filepath` in `sender.py`. The current example uses `test_input.txt`.
+
 ## Settings
 
 The sender settings are edited in `sender.py`.
