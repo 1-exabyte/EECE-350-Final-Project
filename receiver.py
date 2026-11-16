@@ -109,7 +109,7 @@ while True:
     # ---- duplicate: already glued, or already waiting in the buffer
     elif seq < expected or seq in buffer:
         duplicates += 1
-        print(f"RECV {seq} duplicate, discarded -> ACK {expected} (re-sent)")
+        print(f"{RED}RECV {seq} duplicate, discarded -> ACK {expected} (re-sent){RESET}")
 
     # ---- out of order: came early, keep it for later
     else:
