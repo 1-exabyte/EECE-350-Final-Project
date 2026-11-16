@@ -87,7 +87,7 @@ while True:
         end_seq = seq
         end_hash = payload
         if expected < seq:
-            print(f"RECV END({seq}) early -> DUP ACK {expected}")
+            print(f"{YELLOW}RECV END({seq}) early -> DUP ACK {expected}{RESET}")
         else:
             print(f"RECV END({seq}) -> file has {seq} packets")
 
@@ -115,7 +115,7 @@ while True:
     else:
         buffer[seq] = payload
         out_of_order += 1
-        print(f"RECV {seq} out of order, buffered -> DUP ACK {expected}   buffer={sorted(buffer)}")
+        print(f"{YELLOW}RECV {seq} out of order, buffered -> DUP ACK {expected}   buffer={sorted(buffer)}{RESET}")
 
     # ---- every data packet is here -> count END as received, finish
     if end_seq is not None and expected == end_seq:
