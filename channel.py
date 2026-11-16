@@ -44,7 +44,7 @@ def unreliable_send(sock, packet, destination, loss, reorder, channel_state):
         channel_state['held_packet']=None
 
 def flush_channel(sock, destination, channel_state):
-    if channel_state['held_packet'] is None:
+    if channel_state['held_packet'] is not None:
         packet_type, seq, length = struct.unpack("!BIH", channel_state['held_packet'][:7])
         sock.sendto(channel_state['held_packet'], destination)
         channel_state["sent"] += 1
