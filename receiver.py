@@ -152,5 +152,9 @@ print(f"  filled a gap          : {gap_fills}")
 print(f"  duplicates discarded  : {duplicates}")
 print(f"File written            : {out_file} ({len(file_data)} bytes)")
 print(f"Transfer time           : {end_time - start_time:.3f} s")
-print(f"SHA-256                 : {'{GREEN}MATCH {RESET}' if match else 'MISMATCH'}")
+if match:
+    result = f"{GREEN}MATCH{RESET}"
+else:
+    result = f"{RED}MISMATCH{RESET}"
+print(f"SHA-256 check           : {result}")
 print("=========================================")
