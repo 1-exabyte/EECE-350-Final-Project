@@ -133,7 +133,7 @@ while True:
                 continue
             if len(data) >=7:
                 send_ack()
-                print(f"RECV repeated packet -> ACK {expected} (re-sent)")
+                print(f"{RED}RECV repeated packet -> ACK {expected} (re-sent){RESET}")
         break
     send_ack()
 
