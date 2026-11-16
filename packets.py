@@ -33,7 +33,6 @@ def make_packet(packet_type, seq, payload):
     
     header = struct.pack("!BIH", packet_type, seq, len(payload))
     return header+payload
-packet = make_packet(0, 3, b"Hello")
 
 def make_end_packet(filepath, number_of_chunks):
     with open(filepath, "rb") as f:
