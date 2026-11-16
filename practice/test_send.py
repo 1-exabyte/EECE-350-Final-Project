@@ -17,11 +17,13 @@ chunksize = 150
 with open ("test_send.py", "rb") as f:
     data = f.read()
     print(len(data))
-    for i in range(0, len(data), chunksize):
-        chunk = data[i:i+chunksize]
+    total_chunks = (len(data) + chunksize - 1) // chunksize
+    for i in range(total_chunks):
+        chunk = data[i * chunksize:(i + 1) * chunksize]
         print(i, chunk)
-        sock.sendto(struct.pack("!BI", 0, i//chunksize) + chunk, ("127.0.0.1", 9000))
-    sock.sendto(struct.pack("!BI", 2, i // chunksize + 1)+hashlib.sha256(data).digest(), ("127.0.0.1", 9000))
+        sock.sendto(struct.pack("!BIH", 0, i, len(chunk)) + chunk, ("127.0.0.1", 9000))
+    end_hash = hashlib.sha256(data).digest()
+    sock.sendto(struct.pack("!BIH", 2, total_chunks, len(end_hash)) + end_hash, ("127.0.0.1", 9000))
 
 while True:
     data, addr = sock.recvfrom(65535)

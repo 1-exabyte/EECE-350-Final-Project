@@ -1,6 +1,6 @@
 # receiver.py -- Member 3 (Andrew Samaha): receiver and acknowledgements
 #
-# Packet header (agreed by the group):  type (1 byte) | seq (4 bytes) | data
+# Packet header (agreed by the group):  type (1 byte) | seq (4 bytes) | length (2 bytes) | data
 #   type 0 = DATA   type 1 = ACK   type 2 = END (data = SHA-256 of the file)
 #
 # Every ACK carries "expected" = the number of the next packet I need.
@@ -53,7 +53,7 @@ def glue(data):
 
 
 def send_ack():
-    sock.sendto(struct.pack("!BI", ACK, expected), addr)
+    sock.sendto(struct.pack("!BIH", ACK, expected,0), addr)
 
 
 while True:
@@ -62,8 +62,16 @@ while True:
     except ConnectionResetError:        # Windows quirk when the sender closes: ignore it
         continue
 
-    ptype, seq = struct.unpack("!BI", data[:5])
-    payload = data[5:]
+    if len(data) < 7:
+        print(f"BAD packet ({len(data)} bytes) --skipped--")
+        continue
+
+    ptype, seq, length = struct.unpack("!BIH", data[:7]) 
+    payload = data[7:7+length]
+    if ptype not in (DATA,  END) or len(payload) != length:
+        print(f"BAD packet (type {ptype}, seq {seq}) --skipped--")
+        continue
+
     received += 1
     if start_time is None:
         start_time = time.time()
@@ -72,7 +80,10 @@ while True:
     if ptype == END:
         end_seq = seq
         end_hash = payload
-        print(f"RECV END({seq}) -> file has {seq} packets")
+        if expected < seq:
+            print(f"RECV END({seq}) early -> DUP ACK {expected}")
+        else:
+            print(f"RECV END({seq}) -> file has {seq} packets")
 
     # ---- in order: glue it, then glue everything in the buffer that now follows
     elif seq == expected:
@@ -105,12 +116,22 @@ while True:
         expected += 1
         send_ack()
         print(f"ACK {expected} (END received)")
+        end_time = time.time()
+        sock.settimeout(2.0)
+        while True:
+            try:
+                data, addr = sock.recvfrom(65535)
+            except socket.timeout:
+                break
+            except ConnectionResetError:        # Windows quirk when the sender closes: ignore it
+                continue
+            if len(data) >=7 and data[0] == END:
+                send_ack()
+                print(f"RECV END again -> ACK {expected} (re-sent)")
         break
-
     send_ack()
 
 # ---- write the file, then check it against the SHA-256 from END
-end_time = time.time()
 file_data = b"".join(chunks)
 with open(out_file, "wb") as f:
     f.write(file_data)
