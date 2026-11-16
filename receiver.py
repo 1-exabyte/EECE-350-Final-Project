@@ -121,7 +121,7 @@ while True:
     if end_seq is not None and expected == end_seq:
         expected += 1
         send_ack()
-        print(f"ACK {expected} (END received)")
+        print(f"{GREEN}ACK {expected} (END received){RESET}")
         end_time = time.time()
         sock.settimeout(2.0)
         while True:
