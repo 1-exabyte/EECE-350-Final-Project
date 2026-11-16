@@ -20,7 +20,7 @@ with open ("test_send.py", "rb") as f:
     print(len(data))
     total_chunks = (len(data) + chunksize - 1) // chunksize
     for i in random.sample(range(total_chunks), total_chunks):
-        i=random.sample(0,3)
+        i=random.sample(range(10),1)
         chunk = data[i * chunksize:(i + 1) * chunksize]
         print(i, chunk)
         sock.sendto(struct.pack("!BIH", 0, i, len(chunk)) + chunk, ("127.0.0.1", 9000))
