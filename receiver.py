@@ -146,10 +146,10 @@ with open(out_file, "rb") as f:
 
 print("================ SUMMARY ================")
 print(f"Packets received        : {received}")
-print(f"  in order              : {in_order}")
-print(f"  out of order (buffer) : {out_of_order}")
-print(f"  filled a gap          : {gap_fills}")
-print(f"  duplicates discarded  : {duplicates}")
+print(f"  in order              :{GREEN} {in_order}{RESET}")
+print(f"  out of order (buffer) :{YELLOW} {out_of_order}{RESET}")
+print(f"  filled a gap          :{CYAN} {gap_fills}{RESET}")
+print(f"  duplicates discarded  :{RED} {duplicates}{RESET}")
 print(f"File written            : {out_file} ({len(file_data)} bytes)")
 print(f"Transfer time           : {end_time - start_time:.3f} s")
 if match:
