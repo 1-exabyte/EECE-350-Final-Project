@@ -125,9 +125,9 @@ while True:
                 break
             except ConnectionResetError:        # Windows quirk when the sender closes: ignore it
                 continue
-            if len(data) >=7 and data[0] == END:
+            if len(data) >=7:
                 send_ack()
-                print(f"RECV END again -> ACK {expected} (re-sent)")
+                print(f"RECV repeated packet -> ACK {expected} (re-sent)")
         break
     send_ack()
 
