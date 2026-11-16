@@ -22,7 +22,7 @@ if __name__ == "__main__":  # member 2 test
     destination = ("127.0.0.1", 9000)
     loss = 0.1
     reorder = 0.2
-    random.seed(7)
+    random.seed(37)
 
     channel_state = {
         "held_packet": None,

@@ -67,6 +67,26 @@ def update_timeout(sample_rtt, estimated_rtt, deviation):
     return estimated_rtt, deviation, new_timeout
 
 
+def show_window(base, window_size, state):
+    colors = {  # Used ai to know how to do this
+        "-": "\033[90m",
+        "S": "\033[33m",
+        "A": "\033[32m",
+        "R": "\033[31m"
+    }
+
+    right = min(base + window_size, len(state))
+    left = max(0, base - window_size)
+
+    print("WINDOW:", list(range(base, right)))
+    print("Recent states:", end=" ")
+
+    for i in range(left, right):
+        print(colors[state[i]] + str(i) + ":" + state[i] + "\033[0m", end=" ")
+
+    print()
+
+
 def run_sender(packets, window_size, send_packet, ack_socket, timeout=1.0):
     base, next_seq, dup_count = 0, 0, 0
     state = ["-" for i in range(len(packets))]
@@ -80,6 +100,7 @@ def run_sender(packets, window_size, send_packet, ack_socket, timeout=1.0):
     while base < len(packets):
         if base == next_seq:
             timer_started = time.monotonic()
+        old_next = next_seq
         next_seq = fill_window(
             packets, base, next_seq, window_size, send_packet, state, send_time, stats)
 
@@ -131,7 +152,9 @@ def run_sender(packets, window_size, send_packet, ack_socket, timeout=1.0):
             print("Timeout backed off to", timeout, "seconds")
             timer_started = time.monotonic()
             dup_count = 0
-        stats["transfer_time"] = time.monotonic() - started
+        if next_seq != old_next or base != old_base or stats["retransmissions"] > old_retrans:
+            show_window(base, window_size, state)
+    stats["transfer_time"] = time.monotonic() - started
 
     print("All packets, including END, acknowledged.")
     print("Final state:", state)
