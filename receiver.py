@@ -134,6 +134,10 @@ while True:
             if len(data) >=7:
                 send_ack()
                 print(f"{RED}RECV repeated packet -> ACK {expected} (re-sent){RESET}")
+                gap = time.time() - last_time
+                last_time = time.time()
+                wait = max(wait, 3 * gap)
+                sock.settimeout(wait)
         break
     send_ack()
 
