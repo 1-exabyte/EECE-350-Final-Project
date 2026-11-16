@@ -101,7 +101,7 @@ while True:
             expected += 1
         if expected - first == 1:
             in_order += 1
-            print(f"RECV {seq} in order -> ACK {expected}")
+            print(f"{GREEN}RECV {seq} in order -> ACK {expected}{RESET}")
         else:
             gap_fills += 1
             print(f"RECV {seq} fills gap -> ACK {expected}   (glued {first} to {expected - 1})")
