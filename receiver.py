@@ -69,13 +69,13 @@ while True:
         continue
 
     if len(data) < 7:
-        print(f"BAD packet ({len(data)} bytes) --skipped--")
+        print(f"{RED}BAD packet ({len(data)} bytes) --skipped--{RESET}")
         continue
 
     ptype, seq, length = struct.unpack("!BIH", data[:7]) 
     payload = data[7:7+length]
     if ptype not in (DATA,  END) or len(payload) != length:
-        print(f"BAD packet (type {ptype}, seq {seq}) --skipped--")
+        print(f"{RED}BAD packet (type {ptype}, seq {seq}) --skipped--{RESET}")
         continue
 
     received += 1
